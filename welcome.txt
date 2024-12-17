@@ -3,3 +3,5 @@ Hello !
 Welcome to first file created in github
 
 Explore the features as much as you can
+
+This is a new line added from visual studio code

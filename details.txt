@@ -1,0 +1,36 @@
+My design
+
+design will be active/active without HA, active/active ha is very complex and not recommended, it needs floating IP as well
+
+external and internal load balancers will be used
+
+ha2 nic/ethernet0_3 will be created with the .tf configuration, check if this can be used for session sync and if session sync benefits us in any way or not because load balancers will send traffic to same firewall for the existing session, in case primary firewall go down the existing session traffic will still go to primary and only new session traffic will go to secondary firewall so session sync seems to be of no use here
+
+ha2 alone does not work, it requires ha1 to be up, ha2 information between firewalls exchanges via ha1; ha2 does not help us in any way
+
+verify load balancer configuration in .tf files, make corrections wherever necessary
+
+
+
+refer load balancer configuration in below GitHub
+https://github.com/PaloAltoNetworks/azure-terraform-vmseries-fast-ha-failover/blob/master/loadbalancers.tf
+
+
+reference architecture guide link:
+https://www.paloaltonetworks.com/apps/pan/public/downloadResource?pagePath=/content/pan/en_US/resources/guides/azure-architecture-guide
+
+
+
+
+
+
+
+GitHub design
+
+the solution in below GitHub uses active/passive native ha, load balancers use hash based session persistence, ha1 is mgmt, ha2 is ethernet1/3, load balancer will steer traffic between firewalls
+
+https://github.com/PaloAltoNetworks/azure-terraform-vmseries-fast-ha-failover/blob/master/loadbalancers.tf
+
+in active/passive, config sync should not happen because both firewalls have different ip addresses, disable config sync
+
+session sync via ha2 is not helping us in any way because load balancers will send traffic to same firewall for the existing session, in case primary firewall go down the existing session traffic will still go to primary and only new session traffic will go to secondary firewall (confirm this doubt if session sync helps us in any way)
